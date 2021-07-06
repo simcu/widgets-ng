@@ -1,0 +1,13 @@
+{
+  "name": "@simcu/widgets-ng",
+  "version": "1.0.3",
+  "peerDependencies": {
+    "@angular/common": "^11.2.14",
+    "@angular/core": "^11.2.14",
+    "ng-zorro-antd": "^11.4.2",
+    "angular2-draggable": "^2.3.2"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}

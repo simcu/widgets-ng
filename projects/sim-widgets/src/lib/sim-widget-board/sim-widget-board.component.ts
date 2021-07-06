@@ -1,0 +1,168 @@
+import {
+  Component,
+  ComponentFactoryResolver,
+  ViewChild,
+  EventEmitter,
+  ViewContainerRef,
+  Renderer2, ComponentRef, Input, Output, OnChanges, SimpleChanges
+} from '@angular/core';
+import {SimWidgetsService} from '../sim-widgets.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {WidgetMeta} from '../sim-widgets.model';
+
+@Component({
+  selector: 'sim-widget-board',
+  templateUrl: './sim-widget-board.component.html',
+  styleUrls: ['./sim-widget-board.component.css']
+})
+export class SimWidgetBoardComponent implements OnChanges {
+  @Input() widgets: Array<any> = [
+    {name: '未命名', data: [], editorId: null, width: 1600, height: 900},
+  ];
+  @Input() editMode = false;
+  @Output() editModeChange = new EventEmitter<boolean>();
+  @Output() save = new EventEmitter<Array<any>>();
+  @ViewChild('editor', {read: ViewContainerRef, static: true}) editor: ViewContainerRef;
+  scale = 1;
+  objectValues = Object.values;
+  uploadLoading = false;
+  selected: ComponentRef<any> = null;
+  currentView = {name: '未命名', data: [], width: 1600, height: 900};
+
+  constructor(private modal: NzModalService, private message: NzMessageService, private cfr: ComponentFactoryResolver,
+              private renderer: Renderer2, public ws: SimWidgetsService) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.widgets || !Array.isArray(this.widgets)) {
+      this.widgets = [
+        {name: '未命名', data: [], width: 1600, height: 900},
+      ];
+    }
+    this.tabChange(this.widgets[0]);
+  }
+
+  doEdit(): void {
+    this.editMode = true;
+    this.editModeChange.emit(true);
+    this.tabChange(this.currentView);
+  }
+
+  doSave(): void {
+    this.save.emit(this.widgets);
+    this.editMode = false;
+    this.editModeChange.emit(false);
+    this.tabChange(this.currentView);
+  }
+
+  get selectedAttrGroups(): string[] {
+    const hash = [];
+    for (const item of Object.values(this.selected.instance.attributes) as WidgetMeta[]) {
+      if (!item.group) {
+        item.group = '属性';
+      }
+      if (hash.indexOf(item.group) === -1) {
+        hash.push(item.group);
+      }
+    }
+    return hash;
+  }
+
+  tabChange(comps: any): void {
+    setTimeout(() => {
+      this.selected = null;
+      this.currentView = comps;
+      const temp = JSON.parse(JSON.stringify(comps));
+      this.currentView.data = [];
+      this.editor.clear();
+      if (temp.data.length > 0) {
+        for (const item of temp.data) {
+          this.addComponent(item);
+        }
+      }
+    });
+  }
+
+  addComponent(data: any): void {
+    const comp = this.ws.getComponent(data.type);
+    const inst = this.cfr.resolveComponentFactory(comp);
+    const cIns = this.editor.createComponent(inst) as typeof comp;
+    if (data.attributes) {
+      for (const attr of Object.keys(data.attributes)) {
+        cIns.instance.attributes[attr].value = data.attributes[attr].value;
+      }
+    }
+    if (data.properties) {
+      cIns.instance.properties = data.properties;
+    }
+    this.renderer.listen(cIns.location.nativeElement, 'click', (event) => {
+      event.stopPropagation();
+      this.selected = cIns;
+    });
+    cIns.instance.editorId = this.randomString();
+    cIns.instance.properties.edit = this.editMode;
+    this.currentView.data.push({
+      editorId: cIns.instance.editorId,
+      attributes: cIns.instance.attributes,
+      properties: cIns.instance.properties,
+      type: data.type,
+      conditions: cIns.instance?.conditions
+    });
+  }
+
+  randomString(len = 8): string {
+    const $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+    const maxPos = $chars.length;
+    let pwd = '';
+    for (let i = 0; i < len; i++) {
+      pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+  }
+
+  deleteComponent(component: any): void {
+    for (const item of this.currentView.data) {
+      if (item.editorId === component.instance.editorId) {
+        const index = this.currentView.data.indexOf(item);
+        this.currentView.data.splice(index, 1);
+        break;
+      }
+    }
+    component.destroy();
+    this.selected = null;
+  }
+
+  deleteShow(s): void {
+    if (this.widgets.length === 1) {
+      this.message.warning('最后一个不能删除哦！');
+      return;
+    }
+    this.modal.confirm({
+      nzTitle: '删除确认',
+      nzContent: `即将删除 <b style="color: red;">${s.name}</b> ,删除不可逆转，确定吗？`,
+      nzOkText: '确认删除',
+      nzOkType: 'danger',
+      nzOnOk: () => {
+        this.widgets = this.widgets.filter(x => x !== s);
+        this.tabChange(this.widgets[0]);
+      },
+      nzCancelText: '取消',
+    });
+  }
+
+  newShow(): void {
+    this.widgets.push({name: '页面' + this.randomString(4), data: [], width: 1600, height: 900});
+  }
+
+  upload(event, attr): void {
+    const reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = () => {
+      // this.api.query('/view/upload/image', {base64: reader.result}).then(resp => {
+      //   attr.value = resp.data;
+      // });
+    };
+  }
+}

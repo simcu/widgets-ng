@@ -1,16 +1,3 @@
-# WidgetsNg
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.14.
-
-## Usage
-
-```angular2html
-  npm i @simcu/widgets-ng --save
-```
-
-写一个小组件，如下
-
-```angular2html
 import {Component} from '@angular/core';
 
 @Component({
@@ -76,35 +63,3 @@ export class TextWidgetComponent {
   };
 
 }
-
-```
-
-注册小组件：
-
-```angular2html
-@NgModule({
-  declarations: [
-    AppComponent,
-    ImageWidgetComponent,
-    TextWidgetComponent
-  ],
-  imports: [
-    BrowserModule,
-    SimWidgetsModule.forRoot([ImageWidgetComponent, TextWidgetComponent])
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule {
-}
-```
-
-使用开始：
-
-```angular2html
-<sim-widget-board [widgets]="widgets" (save)="save($event)"></sim-widget-board>
-```
-widgets 为要渲染的对象数组
-
-save 为点击保存文档触发的事件，$event 为点击保存时的对象
-
