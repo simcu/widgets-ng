@@ -10,6 +10,7 @@ import {SimWidgetsService} from '../sim-widgets.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {WidgetMeta} from '../sim-widgets.model';
+import {SimWidgetNotFoundComponent} from '../sim-widget-not-found/sim-widget-not-found.component';
 
 @Component({
   selector: 'sim-widget-board',
@@ -50,7 +51,14 @@ export class SimWidgetBoardComponent implements OnChanges {
   }
 
   doSave(): void {
+    for (const item of this.widgets) {
+      for (const itemData of item.data) {
+        delete itemData.editorId;
+        delete itemData.properties.edit;
+      }
+    }
     this.save.emit(this.widgets);
+    console.log(this.widgets);
     this.editMode = false;
     this.editModeChange.emit(false);
     this.tabChange(this.currentView);
@@ -85,10 +93,13 @@ export class SimWidgetBoardComponent implements OnChanges {
   }
 
   addComponent(data: any): void {
-    const comp = this.ws.getComponent(data.type);
+    if (!data.type) {
+      return;
+    }
+    const comp = this.ws.getComponent(data.type) ?? SimWidgetNotFoundComponent;
     const inst = this.cfr.resolveComponentFactory(comp);
     const cIns = this.editor.createComponent(inst) as typeof comp;
-    if (data.attributes) {
+    if (data.attributes && comp !== SimWidgetNotFoundComponent) {
       for (const attr of Object.keys(data.attributes)) {
         cIns.instance.attributes[attr].value = data.attributes[attr].value;
       }
@@ -102,9 +113,12 @@ export class SimWidgetBoardComponent implements OnChanges {
     });
     cIns.instance.editorId = this.randomString();
     cIns.instance.properties.edit = this.editMode;
+    if (comp === SimWidgetNotFoundComponent) {
+      cIns.instance.rawData = data;
+    }
     this.currentView.data.push({
       editorId: cIns.instance.editorId,
-      attributes: cIns.instance.attributes,
+      attributes: comp === SimWidgetNotFoundComponent ? data.attributes : cIns.instance.attributes,
       properties: cIns.instance.properties,
       type: data.type,
       conditions: cIns.instance?.conditions

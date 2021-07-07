@@ -16,7 +16,11 @@ export class SimWidgetsService {
   }
 
   getComponent(type: string): any {
-    return this.componentMap[type];
+    if (Object.keys(this.componentMap).indexOf(type) !== -1) {
+      return this.componentMap[type];
+    } else {
+      return null;
+    }
   }
 
   getComponentTypes(): string[] {

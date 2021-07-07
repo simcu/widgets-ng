@@ -22,11 +22,15 @@ import {FormsModule} from '@angular/forms';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
+import { SimWidgetNotFoundComponent } from './sim-widget-not-found/sim-widget-not-found.component';
+import {NzEmptyModule} from 'ng-zorro-antd/empty';
+import {NzTagModule} from 'ng-zorro-antd/tag';
 
 @NgModule({
   declarations: [
     SimWidgetBaseComponent,
-    SimWidgetBoardComponent
+    SimWidgetBoardComponent,
+    SimWidgetNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -45,9 +49,11 @@ import {NzRadioModule} from 'ng-zorro-antd/radio';
     NzCollapseModule,
     AngularDraggableModule,
     FormsModule,
+    NzEmptyModule,
     NzSelectModule,
     NzRadioModule,
-    NzInputNumberModule
+    NzInputNumberModule,
+    NzTagModule
   ],
   providers: [
     SimWidgetsService,
