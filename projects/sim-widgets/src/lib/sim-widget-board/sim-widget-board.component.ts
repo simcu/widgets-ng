@@ -151,7 +151,7 @@ export class SimWidgetBoardComponent implements OnChanges {
 
   deleteComponent(component: any): void {
     for (const item of this.currentView.data) {
-      if (item.editorId === component.instance.editorId) {
+      if (item.editorId === component.instance.editor.id) {
         const index = this.currentView.data.indexOf(item);
         this.currentView.data.splice(index, 1);
         break;
