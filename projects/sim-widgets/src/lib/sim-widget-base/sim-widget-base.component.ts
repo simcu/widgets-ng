@@ -25,6 +25,7 @@ export class SimWidgetBaseComponent implements OnInit {
   @Input() minHeight = 20;
   @Input() maxWidth = 0;
   @Input() maxHeight = 0;
+  @Input() resizable = true;
   @Input() editor: WidgetEditorParameter;
   draggableArea: HTMLElement;
   originalPosition = null;

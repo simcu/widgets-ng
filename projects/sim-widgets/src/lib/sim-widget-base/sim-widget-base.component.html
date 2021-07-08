@@ -1,4 +1,5 @@
-<div [ngResizable]="editor?.editMode" [ngDraggable]="editor?.editMode" [inBounds]="true" [bounds]="draggableArea"
+<div [ngResizable]="editor?.editMode && resizable && isSelected" [ngDraggable]="editor?.editMode"
+     [inBounds]="true" [bounds]="draggableArea"
      [rzMinWidth]="minWidth" [rzMaxWidth]="maxWidth" [rzMinHeight]="minHeight" [rzMaxHeight]="maxHeight"
      [position]="originalPosition" (movingOffset)="onMoving($event)" (rzResizing)="onResizing($event)"
      [ngStyle]="{zIndex: properties.zIndex,width:properties.width + 'px',height: properties.height + 'px',
