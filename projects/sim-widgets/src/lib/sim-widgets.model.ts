@@ -12,7 +12,11 @@ export interface WidgetProperty {
   height: number;
   left: number;
   top: number;
-  edit: boolean;
+}
+
+export interface WidgetEditorParameter {
+  id: string;
+  editMode: boolean;
 }
 
 

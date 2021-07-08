@@ -107,17 +107,25 @@ export class SimWidgetBoardComponent implements OnChanges {
     if (data.properties) {
       cIns.instance.properties = data.properties;
     }
+    cIns.instance.editor = {
+      id: this.randomString(),
+      editMode: this.editMode
+    };
     this.renderer.listen(cIns.location.nativeElement, 'click', (event) => {
       event.stopPropagation();
       this.selected = cIns;
+      this.ws.selectedWidgetId$.next(cIns.instance.editor.id);
     });
-    cIns.instance.editorId = this.randomString();
-    cIns.instance.properties.edit = this.editMode;
+    this.renderer.listen(cIns.location.nativeElement, 'mousedown', (event) => {
+      event.stopPropagation();
+      this.selected = cIns;
+      this.ws.selectedWidgetId$.next(cIns.instance.editor.id);
+    });
     if (comp === SimWidgetNotFoundComponent) {
       cIns.instance.rawData = data;
     }
     this.currentView.data.push({
-      editorId: cIns.instance.editorId,
+      editorId: cIns.instance.editor.id,
       attributes: comp === SimWidgetNotFoundComponent ? data.attributes : cIns.instance.attributes,
       properties: cIns.instance.properties,
       type: data.type,

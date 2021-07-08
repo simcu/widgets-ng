@@ -1,4 +1,5 @@
 import {Inject, Injectable, InjectionToken, Optional} from '@angular/core';
+import {ReplaySubject} from 'rxjs';
 
 export const WIDGETS = new InjectionToken('custom_widgets');
 
@@ -8,6 +9,7 @@ export const WIDGETS = new InjectionToken('custom_widgets');
 export class SimWidgetsService {
 // 配置所有插件
   private componentMap = {};
+  public selectedWidgetId$ = new ReplaySubject<string>(1);
 
   constructor(@Optional() @Inject(WIDGETS) widgets?: Array<any>) {
     for (const component of widgets) {
@@ -26,4 +28,5 @@ export class SimWidgetsService {
   getComponentTypes(): string[] {
     return Object.keys(this.componentMap);
   }
+
 }

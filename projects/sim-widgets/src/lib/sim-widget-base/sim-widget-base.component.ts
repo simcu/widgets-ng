@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   ElementRef,
   EventEmitter,
   Component,
@@ -7,7 +6,8 @@ import {
   Output,
   OnInit
 } from '@angular/core';
-import {WidgetProperty} from '../sim-widgets.model';
+import {WidgetEditorParameter, WidgetProperty} from '../sim-widgets.model';
+import {SimWidgetsService} from '../sim-widgets.service';
 
 @Component({
   selector: 'sim-widget-base',
@@ -16,7 +16,7 @@ import {WidgetProperty} from '../sim-widgets.model';
 })
 export class SimWidgetBaseComponent implements OnInit {
 
-  constructor(protected elementRef: ElementRef) {
+  constructor(protected elementRef: ElementRef, private ws: SimWidgetsService) {
   }
 
   @Input() properties: WidgetProperty;
@@ -25,12 +25,17 @@ export class SimWidgetBaseComponent implements OnInit {
   @Input() minHeight = 20;
   @Input() maxWidth = 0;
   @Input() maxHeight = 0;
+  @Input() editor: WidgetEditorParameter;
   draggableArea: HTMLElement;
   originalPosition = null;
   originWidth = null;
   originHeight = null;
+  isSelected = false;
 
   ngOnInit(): void {
+    this.ws.selectedWidgetId$.subscribe(x => {
+      this.isSelected = this.editor.id === x;
+    });
     if (this.properties.width <= 0) {
       this.properties.width = this.originWidth ? this.originWidth : this.minWidth;
     }

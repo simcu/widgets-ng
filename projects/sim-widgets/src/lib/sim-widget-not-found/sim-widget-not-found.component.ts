@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {WidgetEditorParameter} from '../sim-widgets.model';
 
 @Component({
   selector: 'lib-sim-widget-not-found',
@@ -11,7 +12,7 @@ export class SimWidgetNotFoundComponent implements OnInit {
     name: '文本',
     image: 'https://oss.simcu.com/veilan/assets/%E6%96%87%E6%9C%AC.png'
   };
-
+  editor: WidgetEditorParameter;
   public properties = {
     name: '未命名',
     zIndex: 10,
@@ -31,5 +32,4 @@ export class SimWidgetNotFoundComponent implements OnInit {
   ngOnInit(): void {
     this.rawJson = JSON.stringify(this.rawData);
   }
-
-};
+}

@@ -1,8 +1,8 @@
-<div [ngResizable]="properties.edit" [ngDraggable]="properties.edit" [inBounds]="true" [bounds]="draggableArea"
+<div [ngResizable]="editor?.editMode" [ngDraggable]="editor?.editMode" [inBounds]="true" [bounds]="draggableArea"
      [rzMinWidth]="minWidth" [rzMaxWidth]="maxWidth" [rzMinHeight]="minHeight" [rzMaxHeight]="maxHeight"
      [position]="originalPosition" (movingOffset)="onMoving($event)" (rzResizing)="onResizing($event)"
      [ngStyle]="{zIndex: properties.zIndex,width:properties.width + 'px',height: properties.height + 'px',
                 position:'absolute', transform: 'translate('+properties.left+'px,'+properties.top+ 'px)',
-                border: properties.edit?'dashed 1px orange':'none', overflow: 'hidden',cursor: properties.edit?'move':''}">
+                border: editor.editMode?(isSelected?'solid 5px orange':'dashed 1px orange'):'none', overflow: 'hidden',cursor: editor?.editMode?'move':''}">
   <ng-content></ng-content>
 </div>
