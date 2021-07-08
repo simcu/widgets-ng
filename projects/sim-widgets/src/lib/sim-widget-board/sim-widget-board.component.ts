@@ -77,6 +77,11 @@ export class SimWidgetBoardComponent implements OnChanges {
     return hash;
   }
 
+  pageClick(): void {
+    this.selected = null;
+    this.ws.selectedWidgetId$.next(null);
+  }
+
   tabChange(comps: any): void {
     setTimeout(() => {
       this.selected = null;

@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
+import {WidgetEditorParameter} from '../../../../sim-widgets/src/lib/sim-widgets.model';
 
 @Component({
   selector: 'app-widget-image',
   template: `
-    <sim-widget-base [minWidth]="160" [minHeight]="90" [(properties)]="properties">
+    <sim-widget-base [minWidth]="160" [minHeight]="90" [(properties)]="properties" [editor]="editor">
       <div [ngStyle]="{backgroundImage: 'url('+attributes.image.value+')', backgroundRepeat: attributes.fit.value
      ,backgroundSize: calcSize(attributes.fit.value), width: '100%',height:'100%'}"></div>
     </sim-widget-base>
@@ -15,7 +16,7 @@ export class ImageWidgetComponent {
     name: '图片',
     image: 'https://oss.simcu.com/veilan/assets/%E5%9B%BE%E7%89%87.png'
   };
-
+  editor: WidgetEditorParameter;
   properties = {
     name: '未命名',
     zIndex: 10,

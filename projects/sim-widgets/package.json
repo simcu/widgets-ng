@@ -1,6 +1,6 @@
 {
   "name": "@simcu/widgets-ng",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "peerDependencies": {
     "@angular/common": "^11.2.14",
     "@angular/core": "^11.2.14",

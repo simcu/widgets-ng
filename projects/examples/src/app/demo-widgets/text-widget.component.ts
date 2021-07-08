@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
+import {WidgetEditorParameter} from '../../../../sim-widgets/src/lib/sim-widgets.model';
 
 @Component({
   selector: 'app-widget-text',
   template: `
-    <sim-widget-base [minWidth]="100" [minHeight]="40" [(properties)]="properties">
+    <sim-widget-base [minWidth]="100" [minHeight]="40" [(properties)]="properties" [editor]="editor">
       <div style="width: 100%; height: 100%;"
            [ngStyle]="{fontSize: attributes.fontSize.value+'px',color: attributes.fontColor.value,fontWeight: attributes.fontWeight.value?'bold':'',textAlign: attributes.fontAlign.value}">
         {{attributes.content.value}}
@@ -17,7 +18,7 @@ export class TextWidgetComponent {
     name: '文本',
     image: 'https://oss.simcu.com/veilan/assets/%E6%96%87%E6%9C%AC.png'
   };
-
+  editor: WidgetEditorParameter;
   public properties = {
     name: '未命名',
     zIndex: 10,
@@ -28,7 +29,18 @@ export class TextWidgetComponent {
     edit: false
   };
 
+  actions = {
+    test: () => {
+      console.log(this.properties);
+    }
+  };
+
   public attributes = {
+    test: {
+      name: '按钮测试按钮测试',
+      type: 'action',
+      value: 'test'
+    },
     content: {
       name: '内容',
       type: 'text',
