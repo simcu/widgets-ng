@@ -4,7 +4,7 @@ import {WidgetEditorParameter} from '../../../../sim-widgets/src/lib/sim-widgets
 @Component({
   selector: 'app-widget-text',
   template: `
-    <sim-widget-base [minWidth]="100" [minHeight]="40" [(properties)]="properties" [editor]="editor">
+    <sim-widget-base [minWidth]="100" [minHeight]="40" [maxWidth]="100" [maxHeight]="40" [(properties)]="properties" [editor]="editor">
       <div style="width: 100%; height: 100%;"
            [ngStyle]="{fontSize: attributes.fontSize.value+'px',color: attributes.fontColor.value,fontWeight: attributes.fontWeight.value?'bold':'',textAlign: attributes.fontAlign.value}">
         {{attributes.content.value}}

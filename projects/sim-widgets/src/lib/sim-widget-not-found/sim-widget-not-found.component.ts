@@ -23,13 +23,16 @@ export class SimWidgetNotFoundComponent implements OnInit {
     edit: false
   };
 
+  public extra: any;
   public attributes = {};
 
   public rawData: any;
 
   public rawJson: string;
+  public rawExtra: string;
 
   ngOnInit(): void {
     this.rawJson = JSON.stringify(this.rawData);
+    this.rawExtra = JSON.stringify(this.extra);
   }
 }

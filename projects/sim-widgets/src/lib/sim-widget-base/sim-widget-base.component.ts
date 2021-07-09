@@ -21,16 +21,14 @@ export class SimWidgetBaseComponent implements OnInit {
 
   @Input() properties: WidgetProperty;
   @Output() propertiesChange = new EventEmitter<WidgetProperty>();
-  @Input() minWidth = 20;
-  @Input() minHeight = 20;
-  @Input() maxWidth = 0;
-  @Input() maxHeight = 0;
+  @Input() minWidth = 1;
+  @Input() minHeight = 1;
+  @Input() maxWidth = 1;
+  @Input() maxHeight = 1;
   @Input() resizable = true;
   @Input() editor: WidgetEditorParameter;
   draggableArea: HTMLElement;
   originalPosition = null;
-  originWidth = null;
-  originHeight = null;
   isSelected = false;
 
   ngOnInit(): void {
@@ -38,18 +36,20 @@ export class SimWidgetBaseComponent implements OnInit {
       this.isSelected = this.editor.id === x;
     });
     if (this.properties.width <= 0) {
-      this.properties.width = this.originWidth ? this.originWidth : this.minWidth;
+      this.properties.width = this.minWidth;
     }
     if (this.properties.height <= 0) {
-      this.properties.height = this.originHeight ? this.originHeight : this.minHeight;
+      this.properties.height = this.minHeight;
     }
     this.draggableArea = this.elementRef.nativeElement.parentElement.parentElement;
     this.originalPosition = {x: this.properties.left, y: this.properties.top};
-    if (this.maxWidth === 0 || this.maxWidth > this.elementRef.nativeElement.parentElement.style.width.replace('px', '')) {
-      this.maxWidth = this.elementRef.nativeElement.parentElement.style.width.replace('px', '');
+    const draggableAreaWidth = Number(this.draggableArea.style.width.replace('px', ''));
+    if (this.maxWidth === 0 || this.maxWidth > draggableAreaWidth) {
+      this.maxWidth = draggableAreaWidth;
     }
-    if (this.maxHeight === 0 || this.maxHeight > this.elementRef.nativeElement.parentElement.style.height.replace('px', '')) {
-      this.maxHeight = this.elementRef.nativeElement.parentElement.style.height.replace('px', '');
+    const draggableAreaHeight = Number(this.draggableArea.style.height.replace('px', ''));
+    if (this.maxHeight === 0 || this.maxHeight > draggableAreaHeight) {
+      this.maxHeight = draggableAreaHeight;
     }
   }
 

@@ -23,7 +23,9 @@ export class SimWidgetBoardComponent implements OnChanges {
   ];
   @Input() editMode = false;
   @Output() editModeChange = new EventEmitter<boolean>();
+  @Input() showEditButton = true;
   @Output() save = new EventEmitter<Array<any>>();
+  @Input() extra = {};
   @ViewChild('editor', {read: ViewContainerRef, static: true}) editor: ViewContainerRef;
   scale = 1;
   objectValues = Object.values;
@@ -58,7 +60,6 @@ export class SimWidgetBoardComponent implements OnChanges {
       }
     }
     this.save.emit(this.widgets);
-    console.log(this.widgets);
     this.editMode = false;
     this.editModeChange.emit(false);
     this.tabChange(this.currentView);
@@ -116,6 +117,7 @@ export class SimWidgetBoardComponent implements OnChanges {
       id: this.randomString(),
       editMode: this.editMode
     };
+    cIns.instance.extra = this.extra;
     this.renderer.listen(cIns.location.nativeElement, 'click', (event) => {
       event.stopPropagation();
       this.selected = cIns;

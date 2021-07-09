@@ -3,10 +3,10 @@
   <nz-tab *ngFor="let tab of widgets" [nzTitle]="tab.name" (nzSelect)="tabChange(tab)"></nz-tab>
 </nz-tabset>
 <ng-template #tabActions>
-  <button nz-button nzType="primary" nzSize="default" (click)="doSave()" *ngIf="editMode">
+  <button nz-button nzType="primary" nzSize="default" (click)="doSave()" *ngIf="showEditButton && editMode">
     保存文档
   </button>
-  <button nz-button nzType="default" nzSize="default" (click)="doEdit();" *ngIf="!editMode">
+  <button nz-button nzType="default" nzSize="default" (click)="doEdit();" *ngIf="showEditButton && !editMode">
     编辑文档
   </button>
 </ng-template>
