@@ -21,7 +21,7 @@ jobs:
         run: |
           version=`git describe --tags`
           echo Change Version To: $version
-          sed -i 's/0.0.0-version-placeholder/"$version"/g' ./projects/sim-widgets/package.json
+          sed -i 's/0.0.0-version-placeholder/`git describe --tags`/g' ./projects/sim-widgets/package.json
           npm ci
           npm run publish
     env:
