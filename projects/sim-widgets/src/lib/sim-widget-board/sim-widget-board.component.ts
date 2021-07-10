@@ -53,7 +53,9 @@ export class SimWidgetBoardComponent implements OnChanges {
         if (changes.editMode.currentValue) {
           this.tabChange(this.currentView);
         } else {
-          this.saveHandler();
+          if (changes.editMode.previousValue !== undefined) {
+            this.saveHandler();
+          }
         }
       }
     }

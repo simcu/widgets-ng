@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build sim-widgets --prod",
+    "build-example": "ng build examples --prod",
     "publish": "ng build sim-widgets --prod && npm publish ./dist/sim-widgets --access public",
     "test": "ng test",
     "lint": "ng lint"
