@@ -1,14 +1,20 @@
 <nz-tabset nzSize="small" nzHideAll nzType="editable-card" (nzAdd)="newShow()" [nzHideAdd]="!editMode"
-           [nzTabBarExtraContent]="tabActions">
-  <nz-tab *ngFor="let tab of widgets" [nzTitle]="tab.name" (nzSelect)="tabChange(tab)"></nz-tab>
+           [nzTabBarExtraContent]="tabActions" [(nzSelectedIndex)]="selectedIndex">
+  <nz-tab *ngFor="let tab of widgets" [nzTitle]="tab.name" (nzClick)="tabChange(tab)"></nz-tab>
 </nz-tabset>
 <ng-template #tabActions>
+  <nz-button-group>
+    <button *ngFor="let btn of extraActions" nz-button [nzType]="btn.type?btn.type:'default'"
+            (click)="btn.action()">{{btn.name}}</button>
+  </nz-button-group>
+  <nz-divider nzType="vertical" *ngIf="showEditButton && extraActions?.length>0"></nz-divider>
   <button nz-button nzType="primary" nzSize="default" (click)="doSave()" *ngIf="showEditButton && editMode">
-    保存文档
+    <i nz-icon nzType="save" nzTheme="outline"></i>保存
   </button>
   <button nz-button nzType="default" nzSize="default" (click)="doEdit();" *ngIf="showEditButton && !editMode">
-    编辑文档
+    <i nz-icon nzType="edit" nzTheme="outline"></i>编辑
   </button>
+
 </ng-template>
 <nz-layout style="margin-top: -16px;">
   <nz-content style="overflow: auto; text-align: left;">

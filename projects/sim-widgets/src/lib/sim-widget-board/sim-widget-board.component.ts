@@ -26,7 +26,9 @@ export class SimWidgetBoardComponent implements OnChanges {
   @Input() showEditButton = true;
   @Output() save = new EventEmitter<Array<any>>();
   @Input() extra = {};
+  @Input() extraActions = [];
   @ViewChild('editor', {read: ViewContainerRef, static: true}) editor: ViewContainerRef;
+  selectedIndex = 0;
   scale = 1;
   objectValues = Object.values;
   uploadLoading = false;
@@ -38,21 +40,36 @@ export class SimWidgetBoardComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!this.widgets || !Array.isArray(this.widgets)) {
-      this.widgets = [
-        {name: '未命名', data: [], width: 1600, height: 900},
-      ];
+    if (changes.widgets) {
+      if (!this.widgets || !Array.isArray(this.widgets)) {
+        this.widgets = [
+          {name: '未命名', data: [], width: 1600, height: 900},
+        ];
+      }
+      this.tabChange(this.widgets[this.selectedIndex]);
     }
-    this.tabChange(this.widgets[0]);
+    if (changes.editMode) {
+      if (changes.editMode.previousValue !== changes.editMode.currentValue) {
+        if (changes.editMode.currentValue) {
+          this.tabChange(this.currentView);
+        } else {
+          this.saveHandler();
+        }
+      }
+    }
   }
 
   doEdit(): void {
     this.editMode = true;
     this.editModeChange.emit(true);
-    this.tabChange(this.currentView);
   }
 
   doSave(): void {
+    this.editMode = false;
+    this.editModeChange.emit(false);
+  }
+
+  saveHandler(): void {
     for (const item of this.widgets) {
       for (const itemData of item.data) {
         delete itemData.editorId;
@@ -60,8 +77,6 @@ export class SimWidgetBoardComponent implements OnChanges {
       }
     }
     this.save.emit(this.widgets);
-    this.editMode = false;
-    this.editModeChange.emit(false);
     this.tabChange(this.currentView);
   }
 

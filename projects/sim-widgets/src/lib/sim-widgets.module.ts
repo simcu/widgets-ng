@@ -17,12 +17,12 @@ import {NzModalModule} from 'ng-zorro-antd/modal';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NZ_ICONS, NzIconModule} from 'ng-zorro-antd/icon';
 import {NzCollapseModule} from 'ng-zorro-antd/collapse';
-import {PlusOutline} from '@ant-design/icons-angular/icons';
+import {PlusOutline, EditOutline, SaveOutline} from '@ant-design/icons-angular/icons';
 import {FormsModule} from '@angular/forms';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
-import { SimWidgetNotFoundComponent } from './sim-widget-not-found/sim-widget-not-found.component';
+import {SimWidgetNotFoundComponent} from './sim-widget-not-found/sim-widget-not-found.component';
 import {NzEmptyModule} from 'ng-zorro-antd/empty';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 
@@ -57,7 +57,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
   ],
   providers: [
     SimWidgetsService,
-    {provide: NZ_ICONS, useValue: [PlusOutline]}
+    {provide: NZ_ICONS, useValue: [PlusOutline, EditOutline, SaveOutline]}
   ],
   exports: [
     SimWidgetBoardComponent,
