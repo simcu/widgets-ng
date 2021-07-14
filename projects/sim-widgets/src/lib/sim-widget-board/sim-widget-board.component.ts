@@ -139,7 +139,7 @@ export class SimWidgetBoardComponent implements OnChanges {
       id: this.randomString(),
       editMode: this.editMode
     };
-    cIns.instance.extra = this.extra$;
+    this.extra$.subscribe(extra => cIns.instance.extra = extra);
     this.renderer.listen(cIns.location.nativeElement, 'click', (event) => {
       event.stopPropagation();
       this.selected = cIns;
