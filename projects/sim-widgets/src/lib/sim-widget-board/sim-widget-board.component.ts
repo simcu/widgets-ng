@@ -11,7 +11,6 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {WidgetMeta} from '../sim-widgets.model';
 import {SimWidgetNotFoundComponent} from '../sim-widget-not-found/sim-widget-not-found.component';
-import {ReplaySubject} from 'rxjs';
 
 @Component({
   selector: 'sim-widget-board',
@@ -29,7 +28,6 @@ export class SimWidgetBoardComponent implements OnChanges {
   @Input() extra = {};
   @Input() extraActions = [];
   @ViewChild('editor', {read: ViewContainerRef, static: true}) editor: ViewContainerRef;
-  extra$ = new ReplaySubject<any>(1);
   selectedIndex = 0;
   scale = 1;
   objectValues = Object.values;
@@ -42,9 +40,6 @@ export class SimWidgetBoardComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.extra) {
-      this.extra$.next(changes.extra.currentValue);
-    }
     if (changes.widgets) {
       if (!this.widgets || !Array.isArray(this.widgets)) {
         this.widgets = [
@@ -139,7 +134,7 @@ export class SimWidgetBoardComponent implements OnChanges {
       id: this.randomString(),
       editMode: this.editMode
     };
-    this.extra$.subscribe(extra => cIns.instance.extra = extra);
+    cIns.instance.extra = this.extra;
     this.renderer.listen(cIns.location.nativeElement, 'click', (event) => {
       event.stopPropagation();
       this.selected = cIns;
